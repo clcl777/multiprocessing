@@ -21,23 +21,31 @@ class HPCToolkit:
         self.nworker = SIM.nworker
         self.nloop = SIM.nloop
         self.EsN0 = SIM.EsN0
-        # self.process_start_time_list = [['' for i in range(EsN0.shape[0])] for j in range(nworker)]
-        # self.process_finish_time_list = [['' for i in range(EsN0.shape[0])] for j in range(nworker)]
-        self.process_start_time_ndarray = np.zeros((self.nworker, self.EsN0.shape[0]))
-        self.process_finish_time_ndarray = np.zeros((self.nworker, self.EsN0.shape[0]))
+        self.process_start_time_list = [['' for i in range(1)] for j in range(self.nworker)]
+        self.process_finish_time_list = [['' for i in range(1)] for j in range(self.nworker)]
+        # self.process_start_time_ndarray = np.zeros((self.nworker, self.EsN0.shape[0]))
+        # self.process_finish_time_ndarray = np.zeros((self.nworker, self.EsN0.shape[0]))
         self.lock = SIM.lock
         # 初期値書き込み
         self.write_initial(self.get_str_spec(self.nworker))
         print()
 
     def start(self, process_idx: int, EsN0_idx: int):
-        # self.process_start_time_list[process_idx][EsN0_idx] = time.time()
-        self.process_start_time_ndarray[process_idx, EsN0_idx] = time.time()
+        if EsN0_idx == 0:
+            self.process_start_time_list[process_idx][EsN0_idx] = time.time()
+        else:
+            self.process_start_time_list[process_idx].append(time.time())
+        # self.process_start_time_ndarray[process_idx, EsN0_idx] = time.time()
 
     def finish(self, process_idx: int, EsN0_idx: int):
-        # self.process_finish_time_list[process_idx][EsN0_idx] = time.time()
-        self.process_finish_time_ndarray[process_idx, EsN0_idx] = time.time()
-        average_time = np.mean(self.process_finish_time_ndarray[process_idx, :] - self.process_start_time_ndarray[process_idx, :])
+        if EsN0_idx == 0:
+            self.process_finish_time_list[process_idx][EsN0_idx] = time.time()
+        else:
+            self.process_finish_time_list[process_idx].append(time.time())
+        # self.process_finish_time_ndarray[process_idx, EsN0_idx] = time.time()
+        # average_time = np.mean(self.process_finish_time_ndarray[process_idx, :] - self.process_start_time_ndarray[process_idx, :])
+        diff_time_list = [x - y for x, y in zip(self.process_finish_time_list[process_idx], self.process_start_time_list[process_idx])]
+        average_time = sum(diff_time_list) / len(diff_time_list)
         d, h, m, s = get_d_h_m_s(float(average_time))
         average_time_text = str(d) + "d " + str(h) + "h " + str(m) + "m " + str(s) + "s" + "/iter"
         text = str(process_idx) + " " + progressbar(EsN0_idx, self.EsN0.shape[0]-1) + " " + average_time_text + "\n"

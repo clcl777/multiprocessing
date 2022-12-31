@@ -12,11 +12,11 @@ class Constant:
 
 if __name__ == '__main__':
     SIM = Constant()
-    SIM.nworker = 19
+    SIM.nworker = 10
     SIM.Kd = 32
     SIM.wloop = 3
     SIM.ml = 4
-    SIM.EsN0 = np.arange(0, 11, 2)
+    SIM.EsN0 = np.arange(0, 21, 2)
     SIM.nloop = 10**SIM.wloop
     SIM.Q = 2**SIM.ml
     RES = np.zeros([len(SIM.EsN0), 7])

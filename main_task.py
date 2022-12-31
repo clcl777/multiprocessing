@@ -54,7 +54,7 @@ def main_task(param):
     for idx_En in range(0, len(SIM.EsN0)):
         SIM.HT.start(nworker_idx, idx_En)
 
-        time.sleep(1)
+        time.sleep(np.random.rand(1)[0]*5)
 
         CH.N0 = 10**(-SIM.EsN0[idx_En]/10)  # 雑音分散
         CH.sigma = np.sqrt(CH.N0 / 2)

@@ -1,0 +1,30 @@
+start 2022/12/20 18:20
+expectation 2022/12/22 13:10
+Active core 30
+Active memory 2GB
+
+0 [■■□□□□□□□□□□□□□□□□□□] 10% 1h23m/it
+1 [■■□□□□□□□□□□□□□□□□□□] 10% 1h23m/it
+2 [■■□□□□□□□□□□□□□□□□□□] 10% 1h23m/it
+3 [■■□□□□□□□□□□□□□□□□□□] 10% 1h23m/it
+
+
+
+https://qiita.com/shin1007/items/c415f2c44f095f06f5aa
+
+
+def progressbar(current, max) -> str:
+    '''
+    args
+        current: int/float 現在値
+        max: int/float 最大値
+
+    length:いじれる。表示したい長さに合わせる。
+    bar:いじれる。好みでどうぞ。今見えてるやつは、プロポーショナルフォントでも使える
+    '''
+    ratio = current / max
+    length = 20
+    progress = int(ratio * length)
+    bar =  f'[{"■" * progress}{"□" * (length - progress)}]'
+    percentage = int(ratio * 100)
+    return f'{bar} {percentage}%'
